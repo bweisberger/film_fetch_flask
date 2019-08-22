@@ -16,18 +16,18 @@ class Users(UserMixin, Model):
     class Meta:
         database = DATABASE
 
-class Reviews(Model):
+class History(Model):
     id = PrimaryKeyField(null=False, unique=True)
     movie_id = CharField(max_length=100)
     created_at = DateTimeField(default=datetime.datetime.now)
-    user = ForeignKeyField(Users, backref='reviews')
+    user = ForeignKeyField(Users, backref='history')
     review = CharField(max_length=255)
     rating = SmallIntegerField()
 
     class Meta:
         database = DATABASE
     
-class Amigos(Model):
+class Fellows(Model):
     id = PrimaryKeyField(null=False, unique=True)
     user1 = ForeignKeyField(Users, backref='following')
     user2 = ForeignKeyField(Users, backref="following")
@@ -37,6 +37,6 @@ class Amigos(Model):
 
 def initialize():
     DATABASE.connect()
-    DATABASE.create_tables([Users, Reviews, Amigos], safe=True)
+    DATABASE.create_tables([Users, History, Fellows], safe=True)
     print('Tables Created')
     DATABASE.close()

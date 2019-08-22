@@ -5,7 +5,7 @@ import models
 
 #import the blueprint       
 from api.user import user
-from api.amigos import amigos
+from api.fellows import fellows
 
 DEBUG = True
 PORT = 8000
@@ -16,7 +16,7 @@ login_manager = LoginManager() #sets up the ability to start a session
 #Start the website
 app = Flask(__name__, static_url_path="", static_folder='static')
 #analogous to const app = express()
-app.secret_key = 'AS;LDFAJLKWE STRING' #analogy: app.use(session({secret_key: 'blah'}))
+app.secret_key = "Vader is Luke's dad" #analogy: app.use(session({secret_key: 'blah'}))
 login_manager.init_app(app) #sets up the session on the app
 
 @login_manager.user_loader
@@ -27,10 +27,10 @@ def load_user(user_id):
         return None
 
 CORS(user, origins=['http://localhost:3000'], supports_credentials=True)
-CORS(amigos, origins=['http://localhost:3000'], supports_credentials=True)
+CORS(fellows, origins=['http://localhost:3000'], supports_credentials=True)
 
 app.register_blueprint(user)
-app.register_blueprint(amigos)
+app.register_blueprint(fellows)
 
 @app.before_request #built in by flask
 def before_request():

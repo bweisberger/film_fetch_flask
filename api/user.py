@@ -40,6 +40,32 @@ def get_all_users():
     except models.DoesNotExist:
         return jsonify(data={}, status={'code': 401, 'message': 'There was an error getting the resource'})
 
+@user.route('/login', methods=['POST'])
+def login():
+    payload = request.form.to_dict()
+    payload['email'].lower()
+    print(payload, "<---payload")
+    # try:
+    user = models.Users.get(models.Users.email == payload['email'])
+    user_dict = model_to_dict(user)
+    print(user_dict, "user_dict")
+    if (check_password_hash(user_dict['password'], payload['password'])):
+        del user_dict['password']
+        login_user(user)
+        print(user, 'this is the user')
+        print('user logged in')
+        print(current_user, 'current_user')
+        # if user.password == payload['password']:
+
+    # users = [model_to_dict(user) for user in models.Users.select().where(
+    #     (models.Users.email == payload['email']) and 
+    #     (models.Users.password == payload['password']))]
+    # user = users[0]
+    # print(users, "<---users")
+    return jsonify(data=user_dict, status={'code': 200, 'message': 'User successfully retrieved'})
+    # except models.DoesNotExist:
+        
+    #     return jsonify(data={}, status={'code': 401, 'message': 'There was an error in finding the user.'})
 
 @user.route('/register', methods=['POST'])
 def register():
