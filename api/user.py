@@ -109,8 +109,15 @@ def get_one_user(id):
 
     return jsonify(data=model_to_dict(user), status={'code': 200, 'message': 'Success'})
 
-@user.route('/<id>', methods=['PUT'])
+@user.route('/<id>/<title>/<country>/<movie_id>', methods=['GET'])
+def get_history(id, title, country, movie_id):
+    user = models.Users.get_by_id(id)
+    history = [model_to_dict(movie) for movie in user.history]
+    print(history, "<------------------------movie history-------------------------")
+    # print(user_dict['history'])
+    return jsonify(data=history, status={'code': 200, 'message':'Success'})
 
+@user.route('/<id>', methods=['PUT'])
 def update_user(id):
     #grab image file from request
     img_file = request.files
