@@ -7,7 +7,7 @@ from PIL import Image
 
 from flask import Blueprint, request, jsonify
 from flask_bcrypt import generate_password_hash, check_password_hash
-from flask_login import login_user, current_user
+from flask_login import login_user, current_user, logout_user, login_required
 from playhouse.shortcuts import model_to_dict
 
 user = Blueprint('users', 'user', url_prefix='/user/v1')
@@ -33,6 +33,7 @@ def save_picture(form_picture):
      return picture_name
 
 @user.route('/', methods=['GET'])
+# @login_required
 def get_all_users():
     try:
         users = [model_to_dict(user) for user in models.Users.select()]
@@ -109,6 +110,7 @@ def get_one_user(id):
     return jsonify(data=model_to_dict(user), status={'code': 200, 'message': 'Success'})
 
 @user.route('/<id>', methods=['PUT'])
+
 def update_user(id):
     #grab image file from request
     img_file = request.files
@@ -132,8 +134,19 @@ def update_user(id):
 
 
 @user.route('/<id>', methods=['Delete'])
+# @login_required
 def delete_user(id):
-    user = models.Users.get_by_id(id)
-    user.delete_instance()
+    if current_user.id == id:
+        user = models.Users.get_by_id(id)
+        user.delete_instance()
+        return jsonify(data='resources successfully deleted', status={'code': 200, 'message': 'Resource deleted'})
+    else:
+        flask.flash('You must be logged in as this user to delete this account')
+        return jsonify(data={}, status={'code': 401, 'message':'Error deleting resource'})
 
-    return jsonify(data='resources successfully deleted', status={'code': 200, 'message': 'Resource deleted'})
+@user.route('/logout', methods=['GET'])
+@login_required
+def logout():
+    logout_user()
+    # print(current_user)
+    return jsonify(data={}, status={'code': 200, 'message':'Successfully logged out user'})

@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 import models
-from flask_login import login_user, current_user
+from flask_login import login_user, current_user, login_required, logout_user
 from playhouse.shortcuts import model_to_dict
 
 fellows = Blueprint('fellows', 'fellows', url_prefix='/fellows/v1')
@@ -51,6 +51,7 @@ def make_fellows(id):
         return jsonify(data=fellows_dict, status={'code': 201, 'message': 'Resource successfully created'})
 
 @fellows.route('/<id>', methods=['DELETE'])
+
 def delete_fellow(id):
     count = 0
     for fellow in models.Fellows.select().where(
