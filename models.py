@@ -3,7 +3,7 @@ from flask_login import UserMixin
 import datetime
 
 
-DATABASE = SqliteDatabase('movies.sqlite')
+DATABASE = SqliteDatabase('movies3.sqlite')
 
 class Users(UserMixin, Model):
     id = PrimaryKeyField(null=False, unique=True)
@@ -19,10 +19,12 @@ class Users(UserMixin, Model):
 class History(Model):
     id = PrimaryKeyField(null=False, unique=True)
     movie_id = CharField(max_length=100)
+    title = CharField(max_length=255)
+    country = CharField(max_length=100)
     created_at = DateTimeField(default=datetime.datetime.now)
     user = ForeignKeyField(Users, backref='history')
-    review = CharField(max_length=255)
-    rating = SmallIntegerField()
+    review = CharField(null=True, max_length=255)
+    rating = SmallIntegerField(null=True)
 
     class Meta:
         database = DATABASE
