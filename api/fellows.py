@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 import models
-from flask_login import login_user, current_user, login_required, logout_user
+from flask_login import login_user, current_user, login_required, logout_user''
 from playhouse.shortcuts import model_to_dict
 
 fellows = Blueprint('fellows', 'fellows', url_prefix='/fellows/v1')

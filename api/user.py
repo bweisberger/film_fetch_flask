@@ -33,7 +33,7 @@ def save_picture(form_picture):
      return picture_name
 
 @user.route('/', methods=['GET'])
-# @login_required
+@login_required
 def get_all_users():
     try:
         users = [model_to_dict(user) for user in models.Users.select()]

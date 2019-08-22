@@ -6,6 +6,7 @@ import models
 #import the blueprint       
 from api.user import user
 from api.fellows import fellows
+from api.utelly import utelly
 
 DEBUG = True
 PORT = 8000
@@ -28,9 +29,11 @@ def load_user(user_id):
 
 CORS(user, origins=['http://localhost:3000'], supports_credentials=True)
 CORS(fellows, origins=['http://localhost:3000'], supports_credentials=True)
+CORS(utelly, origins=['http://localhost:3000'], supports_creditnaisl=True)
 
 app.register_blueprint(user)
 app.register_blueprint(fellows)
+app.register_blueprint(utelly)
 
 @app.before_request #built in by flask
 def before_request():
