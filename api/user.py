@@ -103,19 +103,27 @@ def register():
 
         return jsonify(data = user_dict, status={'code': 201, 'message': 'Success'})
 
+@user.route('/<id>/history', methods=['GET'])
+def get_history(id):
+    user = models.Users.get_by_id(id)
+    history = [model_to_dict(movie) for movie in user.history]
+    # print(history, "<------------------------movie history-------------------------")
+    # print(user_dict['history'])
+    return jsonify(data=history, status={'code': 200, 'message':'Success'})
+
+@user.route('/search/<name>', methods=['GET'])
+def search_user(name):
+    try:
+        users = [model_to_dict(user) for user in models.Users.select().where(models.Users.username.contains(name))]
+        return jsonify(data=users, status={'code': 200, 'message': 'Success'}) 
+    except models.DoesNotExist:
+        return jsonify(data={}, status={'code': 401, 'message': 'There was an error retrieving the resource'})
+
 @user.route('/<id>', methods=['GET'])
 def get_one_user(id):
     user = models.Users.get_by_id(id)
 
     return jsonify(data=model_to_dict(user), status={'code': 200, 'message': 'Success'})
-
-@user.route('/<id>/<title>/<country>/<movie_id>', methods=['GET'])
-def get_history(id, title, country, movie_id):
-    user = models.Users.get_by_id(id)
-    history = [model_to_dict(movie) for movie in user.history]
-    print(history, "<------------------------movie history-------------------------")
-    # print(user_dict['history'])
-    return jsonify(data=history, status={'code': 200, 'message':'Success'})
 
 @user.route('/<id>', methods=['PUT'])
 def update_user(id):

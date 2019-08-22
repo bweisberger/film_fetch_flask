@@ -9,12 +9,12 @@ from PIL import Image
 
 utelly = Blueprint('utelly', 'utelly', url_prefix='/watch/v1')
 
-@utelly.route('/search/<title>/<country>', methods=['GET'])
-def search_movies(title, country):
-    print(title, "<---title", country, "<---country")
+@utelly.route('/search/<title>', methods=['GET'])
+def search_movies(title):
+    print(title, "<---title")
     url = "https://utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com/lookup"
 
-    querystring = {"term":title, "country":country}
+    querystring = {"term":title, "country":us}
     
 
     headers = {
@@ -58,6 +58,4 @@ def add_movie(title, country, id):
                 movie_data = {'movie_id':id,'user':current_user.id, 'title':title, 'country':country}
                 movie = models.History.create(**movie_data)
     return(jsonify(data=model_to_dict(movie), status={'code': 201, 'message': 'Resource successfully created'}))
-
-
 
