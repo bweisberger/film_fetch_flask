@@ -20,15 +20,23 @@ class Reviews(Model):
     id = PrimaryKeyField(null=False, unique=True)
     movie_id = CharField(max_length=100)
     created_at = DateTimeField(default=datetime.datetime.now)
-    user = ForeignKeyField(Users, backref='movies')
+    user = ForeignKeyField(Users, backref='reviews')
     review = CharField(max_length=255)
     rating = SmallIntegerField()
+
+    class Meta:
+        database = DATABASE
+    
+class Amigos(Model):
+    id = PrimaryKeyField(null=False, unique=True)
+    user1 = ForeignKeyField(Users, backref='following')
+    user2 = ForeignKeyField(Users, backref="following")
 
     class Meta:
         database = DATABASE
 
 def initialize():
     DATABASE.connect()
-    DATABASE.create_tables([Users, Reviews], safe=True)
+    DATABASE.create_tables([Users, Reviews, Amigos], safe=True)
     print('Tables Created')
     DATABASE.close()
