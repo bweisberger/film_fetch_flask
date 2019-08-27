@@ -19,21 +19,21 @@ def get_fellows():
         return jsonify(data={}, status={'code': 401, 'message':'There was an error getting the resource'})
 
 
-@fellows.route('/<id>', methods=['POST'])
-def make_fellows(id):
+@fellows.route('/<name>', methods=['POST'])
+def make_fellows(name):
     try:
         # fellows = current_user.following.execute()
         # fellows = current_user.following
         # print(current_user, "<---current_user")
         if current_user.is_authenticated:
-            print(models.Users.select(models.Users.id == current_user), "current_user")
-            fellows = [model_to_dict(fellow) for fellow in models.Fellows.select().where(user_id == current_user.id)]
+            print(models.Users.select(models.Users.username == current_user.username), "current_user")
+            fellows = [model_to_dict(fellow) for fellow in models.Fellows.select().where(user1_id == current_user.id)]
             for fellow in fellows:
-                print(fellow.user2_id, 'row in fellows, col user2_id')
-                if fellow.user2_id == id:
+                print(fellow.user2.username, 'row in fellows, col user2 username')
+                if fellow.user2.username == name:
                     return jsonify(data={}, status={'code': 401, 'message': 'Users are already fellows'})
         print(fellows, '<-------fellows')
-        link = models.Fellows.create(user1 = current_user.id, user2=id)
+        link = models.Fellows.create(user1 = current_user.username, user2=name)
         link_dict = model_to_dict(link)
         return jsonify(data=link_dict, status={'code': 201, 'message': 'Resource successfully created'})
         # fellows = [model_to_dict(fellow) for fellow in current_user.following]
@@ -46,7 +46,7 @@ def make_fellows(id):
         # # print(fellows, "<----------------fellows")
         
     except :
-        fellows = models.Fellows.create(user1 = current_user.id, user2=id)
+        fellows = models.Fellows.create(user1 = current_user.username, user2=name)
         fellows_dict = model_to_dict(fellows)
         return jsonify(data=fellows_dict, status={'code': 201, 'message': 'Resource successfully created'})
 

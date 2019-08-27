@@ -29,7 +29,7 @@ def load_user(user_id):
 
 CORS(user, origins=['http://localhost:3000'], supports_credentials=True)
 CORS(fellows, origins=['http://localhost:3000'], supports_credentials=True)
-CORS(utelly, origins=['http://localhost:3000'], supports_creditnaisl=True)
+CORS(utelly, origins=['http://localhost:3000'], supports_credentials=True)
 
 app.register_blueprint(user)
 app.register_blueprint(fellows)

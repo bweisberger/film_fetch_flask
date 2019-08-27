@@ -43,9 +43,11 @@ def get_all_users():
 
 @user.route('/login', methods=['POST'])
 def login():
-    payload = request.form.to_dict()
-    payload['email'].lower()
+    # print(request.form)
+    payload = request.get_json()
+    # print(request.json, "<---request data")
     print(payload, "<---payload")
+    payload['email'].lower()
     # try:
     user = models.Users.get(models.Users.email == payload['email'])
     user_dict = model_to_dict(user)
@@ -103,9 +105,9 @@ def register():
 
         return jsonify(data = user_dict, status={'code': 201, 'message': 'Success'})
 
-@user.route('/<id>/history', methods=['GET'])
-def get_history(id):
-    user = models.Users.get_by_id(id)
+@user.route('/<name>/history', methods=['GET'])
+def get_history(name):
+    user = models.Users.get(models.Users.username == name)
     history = [model_to_dict(movie) for movie in user.history]
     # print(history, "<------------------------movie history-------------------------")
     # print(user_dict['history'])
@@ -119,14 +121,14 @@ def search_user(name):
     except models.DoesNotExist:
         return jsonify(data={}, status={'code': 401, 'message': 'There was an error retrieving the resource'})
 
-@user.route('/<id>', methods=['GET'])
-def get_one_user(id):
-    user = models.Users.get_by_id(id)
+@user.route('/<name>', methods=['GET'])
+def get_one_user(name):
+    user = models.Users.get(models.Users.username == name)
 
     return jsonify(data=model_to_dict(user), status={'code': 200, 'message': 'Success'})
 
-@user.route('/<id>', methods=['PUT'])
-def update_user(id):
+@user.route('/<name>', methods=['PUT'])
+def update_user(name):
     #grab image file from request
     img_file = request.files
     #grab form data and turn into dictionary
@@ -139,20 +141,20 @@ def update_user(id):
     payload["image"] = file_picture_path
 
     #query to upate users whose ids match argument id - pass in payload
-    query = models.Users.update(**payload).where(models.Users.id == id)
+    query = models.Users.update(**payload).where(models.Users.username == name)
     #execute query
     query.execute()
 
 
-    updated_user = models.Users.get_by_id(id)
+    updated_user = models.Users.get(models.Users.username == name)
     return jsonify(data=model_to_dict(updated_user), status={'code': 200, 'message': 'Success'})
 
 
-@user.route('/<id>', methods=['Delete'])
+@user.route('/<name>', methods=['Delete'])
 # @login_required
-def delete_user(id):
-    if current_user.id == id:
-        user = models.Users.get_by_id(id)
+def delete_user(name):
+    if current_user.username == name:
+        user = models.Users.get_by_id(current_user.id)
         user.delete_instance()
         return jsonify(data='resources successfully deleted', status={'code': 200, 'message': 'Resource deleted'})
     else:

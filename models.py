@@ -3,7 +3,7 @@ from flask_login import UserMixin
 import datetime
 
 
-DATABASE = SqliteDatabase('movies3.sqlite')
+DATABASE = PostgresqlDatabase('film_fetch')
 
 class Users(UserMixin, Model):
     id = PrimaryKeyField(null=False, unique=True)
@@ -11,6 +11,7 @@ class Users(UserMixin, Model):
     email = CharField(max_length=100)
     password = CharField(max_length=100)
     image = CharField(max_length=255)
+    lastWatched = CharField(null=True, max_length=255)
     created_at = DateTimeField(default=datetime.datetime.now)
 
     class Meta:
