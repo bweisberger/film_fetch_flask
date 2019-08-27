@@ -27,9 +27,9 @@ def load_user(user_id):
     except models.DoesNotExist:
         return None
 
-CORS(user, origins=['http://localhost:3000'], supports_credentials=True)
-CORS(fellows, origins=['http://localhost:3000'], supports_credentials=True)
-CORS(utelly, origins=['http://localhost:3000'], supports_credentials=True)
+CORS(user, origins=['http://localhost:3000', 'https://filmfetch.herokuapp.com/'], supports_credentials=True)
+CORS(fellows, origins=['http://localhost:3000', 'https://filmfetch.herokuapp.com/'], supports_credentials=True)
+CORS(utelly, origins=['http://localhost:3000', 'https://filmfetch.herokuapp.com/'], supports_credentials=True)
 
 app.register_blueprint(user)
 app.register_blueprint(fellows)
@@ -52,7 +52,12 @@ def after_request(response):
 def index(): #method called immediately, name it anything
     return 'hi' #analogous to res.send() in express
 
+import os
+## import os at the top of your file 
 
+if 'ON_HEROKU' in os.environ:
+    print('hitting ')
+    models.initialize()
 # Run the app when the program starts
 if __name__ == '__main__':
     models.initialize()
