@@ -6,13 +6,13 @@ import os
 from playhouse.db_url import connect
 
 DATABASE = connect(os.environ.get('DATABASE_URL'))
-
+# DATABASE = PostgresqlDatabase('movies')
 class Users(UserMixin, Model):
     id = PrimaryKeyField(null=False, unique=True)
     username = CharField(max_length=100)
     email = CharField(max_length=100)
     password = CharField(max_length=100)
-    image = CharField(max_length=255)
+    image = CharField(null=True, max_length=255)
     lastWatched = CharField(null=True, max_length=255)
     created_at = DateTimeField(default=datetime.datetime.now)
 

@@ -72,10 +72,12 @@ def login():
 @user.route('/register', methods=['POST'])
 def register():
     img_file = request.files #grab image file
+    print(img_file, "image file")
     payload = request.form.to_dict()
     img_file_dict = img_file.to_dict()
-    payload['image'] = img_file_dict
-    # print(img_file_dict, "img_file_dict")
+    print(img_file_dict, 'image file dict')
+    payload['image'] = img_file_dict['image']
+    print(img_file_dict, "img_file_dict")
     print(payload, "payload", type(payload), "type")
 
     payload["email"].lower() #make emails lowercase
@@ -85,18 +87,18 @@ def register():
     except models.DoesNotExist: #boolean property of the model
         #if no user with that email, make one
 
-        #hash password using bcrypt
-        # payload["password"] = generate_password_hash(payload["password"])
-        # file_picture_path = save_picture(img_file_dict["image"]) #save picture path
+        # hash password using bcrypt
+        payload["password"] = generate_password_hash(payload["password"])
+        file_picture_path = save_picture(img_file_dict["image"]) #save picture path
 
         #add the image property to the form dictionary
-        # payload["image"] = file_picture_path
+        payload["image"] = file_picture_path
 
         #makes the user (1 row in the sql table)
         user = models.Users.create(**payload)
         login_user(user) #from flask_login - sets userid in session
     
-        current_user.image = payload['image'] #current_user comes from login_user(), and we're grabbing the picture path
+        # current_user.image = payload['image'] #current_user comes from login_user(), and we're grabbing the picture path
 
         user_dict = model_to_dict(user)
 
