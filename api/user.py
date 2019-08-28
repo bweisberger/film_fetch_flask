@@ -22,7 +22,7 @@ def save_picture(form_picture):
     #make new name by adding hex to extension 
      picture_name = random_hex + f_ext
      #create filepath, grab current working directory, add static/profile_pics/ and add picture_name
-     file_path_for_avatar = os.path.join(os.getcwd(), "static/profile_pics/" + picture_name)
+     file_path_for_avatar = os.path.join("/static/profile_pics/" + picture_name)
 
     #using Pillow
      output_size = (125, 175) #set size of picture as tuple
