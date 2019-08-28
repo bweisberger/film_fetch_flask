@@ -18,6 +18,8 @@ login_manager = LoginManager() #sets up the ability to start a session
 #Start the website
 app = Flask(__name__, static_url_path="", static_folder='static')
 app.wsgi_app = WhiteNoise(app.wsgi_app, root='static/')
+app.wsgi_app.add_files('static/profile_pics/')
+
 
 #analogous to const app = express()
 app.secret_key = "Vader is Luke's dad" #analogy: app.use(session({secret_key: 'blah'}))
