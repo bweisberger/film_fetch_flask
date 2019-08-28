@@ -71,9 +71,10 @@ def login():
 
 @user.route('/register', methods=['POST'])
 def register():
-    # img_file = request.files #grab image file
-    payload = request.to_dict()
-    # img_file_dict = img_file.to_dict()
+    img_file = request.files #grab image file
+    payload = request.form.to_dict()
+    img_file_dict = img_file.to_dict()
+    payload['image'] = img_file_dict
     # print(img_file_dict, "img_file_dict")
     print(payload, "payload", type(payload), "type")
 
